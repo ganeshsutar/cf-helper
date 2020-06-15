@@ -59,11 +59,9 @@ public class Main {
 
 export function activate(context: vscode.ExtensionContext) {
 
-	console.log('CodeForces plugin for the Problem Set');
-
 	let disposable = vscode.commands.registerCommand('cf-helper.downloadProblem', () => {
 		const folders = (vscode.workspace.workspaceFolders || []);
-		vscode.window.showInformationMessage(`CodeForces helper plugin. Folders ${folders.length}`);
+		// vscode.window.showInformationMessage(`CodeForces helper plugin. Folders ${folders.length}`);
 
 		if(folders.length == 0) {
 			vscode.window.showInformationMessage("Please open a folder to create the problem folder");
@@ -74,10 +72,11 @@ export function activate(context: vscode.ExtensionContext) {
 			prompt: 'Please enter problem no? e.g. 117 a'
 		}).then((value) => {
 			const problem = getProblemNo(value);
-			console.log(problem);
-			// vscode.window.showInformationMessage(`Value entered: ${JSON.stringify(getProblemNo(value))}`);
+			vscode.window.showInformationMessage(`Value entered: ${JSON.stringify(getProblemNo(value))}, Downloading problem.`);
+
 			const url = `https://codeforces.com/problemset/problem/${problem.contest}/${problem.no}`;
 			return axios.get(url).then((res: any) => {
+				vscode.window.showInformationMessage(`Problem downloaded`);
 				return handlePage(problem, res);
 			});
 		});
